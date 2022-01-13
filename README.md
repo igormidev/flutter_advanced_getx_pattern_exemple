@@ -1,12 +1,11 @@
 # flutter_good_practices
-
-Um projeto para mostrar minhas habilidades nos principios do SOLID
+This is a project that aims to demonstrate the GetX design pattern (https://kauemurakami.github.io/getx_pattern/) with an implementation that explores the use of http requests, camera/gallery usage, database and various other demonstrations of how to structure such a project.
 
 ## Tecnologias Usadas
 
-1 - Consulta de API
-2 - Abrir URL
-3 - Consulta no Banco de Dados (Firebase)
-4 - Acesso à imagens da câmera e galeria
-5 - Escrever e ler arquivos na memória do celular
-6 - Localização do usuário via GPS
+1 - API Request
+2 - Open URL
+3 - Database management (Firebase)
+4 - Access to camera and galery
+5 - Write and Read in the Smartfone Storage
+6 - Localization with GPS
