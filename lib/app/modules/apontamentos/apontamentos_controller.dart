@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_good_practices/app/core/exceptions/constants_handling.dart';
 import 'package:flutter_good_practices/app/core/exceptions/snackbar_error.dart';
 import 'package:flutter_good_practices/app/core/values/strings.dart';
 import 'package:flutter_good_practices/app/data/models/abastecimento_model.dart';
@@ -8,20 +9,21 @@ import 'package:flutter_good_practices/app/data/repository/apontamentos_reposito
 import 'package:get/get.dart';
 
 class ApontamentosController extends GetxController {
+  ApontamentosController({required this.apontamentosRepository});
+
   // Note: normalmente criar uma Key Global é custoso, mas como o
   // Getx sempre dispoe ela da memoria quando o controller não
   // está sendo usado, usar keys globais tem menos impacto!
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void onInit() async {
     super.onInit();
-    abastecimento.assignAll(await getAbastecimentos());
+    abastecimento.assignAll(await getAbastecimentos(false));
   }
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  //Variaveis
   final ApontamentosRepository apontamentosRepository;
-  ApontamentosController({required this.apontamentosRepository});
   final RxBool isLoading = false.obs;
   final RxString filtroSelecionado = todos.obs;
   final Rx<String?> postoSelecionado = Rx<String?>(null);
@@ -31,14 +33,21 @@ class ApontamentosController extends GetxController {
   final Rx<double> litro = 0.0.obs;
   final Rx<double> quantidade = 0.0.obs;
 
-  Future<List<Abastecimento>> getAbastecimentos() async {
-    return await apontamentosRepository.getAbastecimento();
-  }
+  //Controllers:
+  final TextEditingController litrosColocados = TextEditingController();
+  final TextEditingController valorLitro = TextEditingController();
+
+  //Controllers não implementados por falta de tempo
+  final TextEditingController localPedagio = TextEditingController();
+  final TextEditingController precoPedagio = TextEditingController();
+  final TextEditingController nomeDoGasto = TextEditingController();
+  final TextEditingController descricao = TextEditingController();
+  final TextEditingController valor = TextEditingController();
 
   cleanAll() {
-    isLoading.value = false;
     postoSelecionado.value = null;
     tipoCombustivel.value = null;
+    comprovante.value = null;
     litro.value = 0.0;
     quantidade.value = 0.0;
     litrosColocados.clear();
@@ -50,6 +59,18 @@ class ApontamentosController extends GetxController {
     valor.clear();
   }
 
+  //  Retorna os abastecimentos registrados no banco de dados e
+  /// atualiza a lista caso o parâmetro [setAbastecimento] seja true
+  Future<List<Abastecimento>> getAbastecimentos(bool setAbastecimento) async {
+    isLoading.value = true;
+    var lista = await apontamentosRepository.getAbastecimento();
+    isLoading.value = false;
+    if (setAbastecimento) abastecimento.assignAll(lista);
+    return lista;
+  }
+
+  /// Faz Upload do Abastecimento para o banco de dados depois de salvar a imagem
+  /// com o [getComprovante]
   Future<void> uploadAbastecimento() async {
     isLoading.value = true;
     if (comprovante.value == null) {
@@ -79,6 +100,9 @@ class ApontamentosController extends GetxController {
 
       String image = await apontamentosRepository.storageImageAndGetLink(
           comprovante.value!, abastecimentoKey);
+      if (image == imageNotUploaded || image == imageNotFound) {
+        return;
+      }
       var abastecimento = Abastecimento(
         valorLitro: _valorLitro!,
         litrosColocados: _litrosColocados!,
@@ -95,10 +119,13 @@ class ApontamentosController extends GetxController {
       isLoading.value = false;
     }
     cleanAll();
-    await getAbastecimentos();
+    getAbastecimentos(true);
+
     isLoading.value = false;
   }
 
+  /// Usa o serviço de fotos para conseguir tirar uma imagem de um comprovante
+  /// que pode vir tanto da câmera ou galeria, dependendo do método [isFromCamera]
   getComprovante({bool isFromCamera = false}) async {
     isLoading.value = false;
 
@@ -123,13 +150,4 @@ class ApontamentosController extends GetxController {
       }
     }
   }
-
-  //Controllers:
-  final TextEditingController litrosColocados = TextEditingController();
-  final TextEditingController valorLitro = TextEditingController();
-  final TextEditingController localPedagio = TextEditingController();
-  final TextEditingController precoPedagio = TextEditingController();
-  final TextEditingController nomeDoGasto = TextEditingController();
-  final TextEditingController descricao = TextEditingController();
-  final TextEditingController valor = TextEditingController();
 }

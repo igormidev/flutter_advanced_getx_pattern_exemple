@@ -46,6 +46,7 @@ class Abastecimento extends Equatable {
   Map<String, dynamic> toJson() => {
         'id': id,
         'posto': posto,
+        'type': type,
         'tipoDeCombustivel': tipoDeCombustivel,
         'imagemUrl': imagemUrl,
         'litrosColocados': litrosColocados,

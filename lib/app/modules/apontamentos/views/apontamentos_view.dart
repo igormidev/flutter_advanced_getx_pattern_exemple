@@ -5,6 +5,7 @@ import 'package:flutter_good_practices/app/modules/apontamentos/apontamentos_con
 import 'package:flutter_good_practices/app/modules/apontamentos/widgets/apontamento_card.dart';
 import 'package:flutter_good_practices/app/routes/app_pages.dart';
 import 'package:flutter_good_practices/app/shared/base_scaffold.dart';
+import 'package:flutter_good_practices/app/shared/custom_loading.dart';
 import 'package:flutter_good_practices/app/shared/custom_text.dart';
 import 'package:flutter_good_practices/app/core/utils/extensions.dart';
 import 'package:flutter_good_practices/app/shared/filter_text.dart';
@@ -46,8 +47,21 @@ class ApontamentosView extends GetView<ApontamentosController> {
       children: [
         SizedBox(height: 1.0.hp),
         Container(
-          margin: EdgeInsets.only(left: 5.0.wp),
-          child: boldText('Bem vindo,\nRenan.', size: 28),
+          margin: EdgeInsets.symmetric(horizontal: 5.0.wp),
+          child: Row(
+            children: [
+              boldText('Bem vindo,\nRenan.', size: 28),
+              const Spacer(),
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                    onPressed: () async {
+                      await controller.getAbastecimentos(true);
+                    },
+                    icon: const Icon(Icons.refresh, size: 32)),
+              )
+            ],
+          ),
         ),
         SizedBox(height: 3.0.hp),
         boldText(
@@ -73,7 +87,19 @@ class ApontamentosView extends GetView<ApontamentosController> {
             },
           ),
         ),
-        ...controller.abastecimento.map((e) => ApontamentoCard(e)).toList(),
+        Obx(
+          () {
+            return controller.isLoading.value
+                ? const CustomLoading()
+                : ListView.builder(
+                    itemCount: controller.abastecimento.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return ApontamentoCard(controller.abastecimento[index]);
+                    },
+                  );
+          },
+        ),
       ],
     );
   }

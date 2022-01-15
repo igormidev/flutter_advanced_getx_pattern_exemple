@@ -7,12 +7,11 @@ import 'package:flutter_good_practices/app/shared/custom_text.dart';
 import 'package:get/get.dart';
 
 class BaseScaffold extends StatelessWidget {
-  final apontCtrl = Get.find<ApontamentosController>();
   final List<Widget> children;
   final Widget? floatingActionButton;
 
   final FloatingActionButtonLocation? floatingActionButtonLocation;
-  BaseScaffold({
+  const BaseScaffold({
     Key? key,
     required this.children,
     this.floatingActionButton,

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter_good_practices/app/core/exceptions/snackbar_error.dart';
 import 'package:flutter_good_practices/app/data/interfaces/photo_interface.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/state_manager.dart';
@@ -13,9 +14,15 @@ class PhotoService extends GetxService implements IPhotoInterface {
       final imageTemporary = File(image.path);
       return imageTemporary;
     } on PlatformException catch (e) {
-      //TODO: implementar exceção caso o usuário não dê permissão de acesso à câmera
-
+      showError(
+          error: 'Ative a permissão pro aplicativo usar a câmera!',
+          details: e.code);
+    } catch (e) {
+      showError(
+          error: 'Erro ao pegar imagem da galeria!', details: e.toString());
     }
+    //Ao retornar o valor nulo o arquivo não será exibido, será como se nada
+    // tivesse ocorrido
     return null;
   }
 
@@ -27,8 +34,16 @@ class PhotoService extends GetxService implements IPhotoInterface {
       final imageLocation = File(image.path);
       return imageLocation;
     } on PlatformException catch (e) {
-      //TODO: implementar exceção caso o usuário não dê permissão de acesso à câmera
+      showError(
+        error: 'Ative a permissão pro aplicativo usar a galeria!',
+        details: e.code,
+      );
+    } catch (e) {
+      showError(
+          error: 'Erro ao pegar imagem da galeria!', details: e.toString());
     }
+    //Ao retornar o valor nulo o arquivo não será exibido, será como se nada
+    // tivesse ocorrido
     return null;
   }
 }

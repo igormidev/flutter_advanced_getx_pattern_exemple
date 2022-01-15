@@ -15,6 +15,7 @@ class WhatsAppProvider {
 
     final String finalUrl =
         'https://api.whatsapp.com/send?phone=$phoneNumber&text=$finalMenssage';
+    print('final url:   $finalUrl');
 
     await _urlLaucher.lauchUrl(finalUrl);
   }

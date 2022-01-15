@@ -1,6 +1,7 @@
 import 'package:flutter_good_practices/app/modules/apontamentos/apontamentos_binding.dart';
 import 'package:flutter_good_practices/app/modules/apontamentos/views/abastecimento_view.dart';
 import 'package:flutter_good_practices/app/modules/apontamentos/views/apontamentos_view.dart';
+import 'package:flutter_good_practices/app/modules/apontamentos/views/details_view.dart';
 import 'package:flutter_good_practices/app/modules/apontamentos/views/gasto_avulso_view.dart';
 import 'package:flutter_good_practices/app/modules/apontamentos/views/pegadio_view.dart';
 import 'package:flutter_good_practices/app/modules/rotas/rotas_binding.dart';

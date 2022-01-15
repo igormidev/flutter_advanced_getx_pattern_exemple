@@ -83,7 +83,8 @@ class AbastecimentoView extends StatelessWidget {
                             if (text == null ||
                                 text.isEmpty ||
                                 RegExp(RegexPattern.numericOnly).hasMatch(
-                                    text.contains('.') ? text : '$text.')) {
+                                    text.contains('.') ? text : '$text.') ||
+                                (double.tryParse(text) == null)) {
                               return 'Escreva um número';
                             }
                             return null;
@@ -105,7 +106,8 @@ class AbastecimentoView extends StatelessWidget {
                             if (text == null ||
                                 text.isEmpty ||
                                 RegExp(RegexPattern.numericOnly)
-                                    .hasMatch(text)) {
+                                    .hasMatch(text) ||
+                                (double.tryParse(text) == null)) {
                               return 'Escreva um número\ncom vírgula!';
                             }
                             return null;

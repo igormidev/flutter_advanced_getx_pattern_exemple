@@ -12,6 +12,7 @@ Text boldText(
     text,
     textAlign: align,
     overflow: TextOverflow.ellipsis,
+    maxLines: 3,
     style: TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: size.sp,
