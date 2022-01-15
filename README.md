@@ -9,3 +9,9 @@ This is a project that aims to demonstrate the GetX design pattern (https://kaue
 4 - Access to camera and galery
 5 - Write and Read in the Smartfone Storage
 6 - Localization with GPS
+
+Interface que implementa o contrato que qualquer
+serviço que implemente essas funções intrínsecas
+a função desejada possa ser usado, assim facilitando
+a sua troca pois qualquer package que implemente essas
+funções na camada service servirá
