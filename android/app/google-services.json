@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "414284013159",
+    "project_id": "getxpattern-72198",
+    "storage_bucket": "getxpattern-72198.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414284013159:android:ff9e4f1c4d21e8eb067ec2",
+        "android_client_info": {
+          "package_name": "com.igormidev.flutter_good_practices"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414284013159-b8rcejtjh6jkat49mmg9puf58bvbt30v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsQY9cxa_pw3Z1GhjsPymjTh-XcJAemDc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414284013159-b8rcejtjh6jkat49mmg9puf58bvbt30v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
