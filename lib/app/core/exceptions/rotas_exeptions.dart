@@ -1,0 +1,1 @@
+class RotasExeption implements Exception {}

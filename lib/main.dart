@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      initialRoute: Routes.APONTAMENTOSSCREEN,
+      initialRoute: Routes.ROTASCONSULTA,
       getPages: AppPages.routes,
     );
   }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ApontamentoField extends StatelessWidget {
+class CustomField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final bool onlyNumbers;
   final bool isUnlimitedText;
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
-  const ApontamentoField({
+  const CustomField({
     Key? key,
     required this.controller,
     required this.label,

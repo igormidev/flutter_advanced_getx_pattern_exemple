@@ -12,14 +12,20 @@ const String latitude = 'latitude';
 
 //para aba de escolha
 const String todos = 'Todos';
-
+// postos
 const String ipiranga = 'Ipiranga';
 const String shell = 'Shell';
 const String extra = 'Extra';
 const String petrobras = 'Petrobras';
 const String outro = 'Outro...';
-
+// tipo de gasolina
 const String comum = 'Comum';
 const String etanol = 'Etanol';
 const String diesel = 'Diesel S10';
 const String gasNatural = 'Gás Natural Comum';
+
+// tipo de gasolina
+const String distanciaKey = 'distancia';
+const String tempoDeViagemKey = 'duracao';
+const String pedagioCustoKey = 'valorPedagio';
+const String combustivelKey = 'valorCombustivel';

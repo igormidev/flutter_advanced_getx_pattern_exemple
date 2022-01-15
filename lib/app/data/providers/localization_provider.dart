@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class LocalizationProvider {
   final ILocalizationInterface _localize = Get.find<LocalizationService>();
 
-  Future<Map<String, dynamic>> getLocal() async {
+  Future<Map<String, double>> getLocal() async {
     var local = await _localize.determinePosition();
     return local;
   }

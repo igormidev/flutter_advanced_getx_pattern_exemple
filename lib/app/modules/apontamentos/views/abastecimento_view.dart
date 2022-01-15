@@ -3,7 +3,7 @@ import 'package:flutter_good_practices/app/core/utils/extensions.dart';
 import 'package:flutter_good_practices/app/core/values/images.dart';
 import 'package:flutter_good_practices/app/core/values/strings.dart';
 import 'package:flutter_good_practices/app/modules/apontamentos/apontamentos_controller.dart';
-import 'package:flutter_good_practices/app/modules/apontamentos/widgets/apontamento_field.dart';
+import 'package:flutter_good_practices/app/shared/custom_field.dart';
 import 'package:flutter_good_practices/app/shared/base_scaffold.dart';
 import 'package:flutter_good_practices/app/shared/custom_button.dart';
 import 'package:flutter_good_practices/app/shared/custom_loading.dart';
@@ -76,9 +76,10 @@ class AbastecimentoView extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: ApontamentoField(
+                        child: CustomField(
                           controller: apontCtrl.litrosColocados,
                           label: 'Litros Colocados',
+                          onlyNumbers: true,
                           validator: (text) {
                             if (text == null ||
                                 text.isEmpty ||
@@ -99,9 +100,10 @@ class AbastecimentoView extends StatelessWidget {
                       ),
                       SizedBox(width: 1.0.hp),
                       Expanded(
-                        child: ApontamentoField(
+                        child: CustomField(
                           controller: apontCtrl.valorLitro,
                           label: 'Valor do litro',
+                          onlyNumbers: true,
                           validator: (text) {
                             if (text == null ||
                                 text.isEmpty ||

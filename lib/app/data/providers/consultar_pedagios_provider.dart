@@ -27,7 +27,7 @@ class ConsultarPedagioProvider {
         'veiculo': veiculo,
         'eixos': eixos,
         'consumo': consumoPorLitroCarro,
-        'combustivel': consumoPorLitroCarro,
+        'combustivel': precoCombustivel,
         'paradas': paradas,
         'token': _meuTokken,
       },
