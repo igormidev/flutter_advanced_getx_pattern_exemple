@@ -1,7 +1,8 @@
 import 'dart:developer';
-
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_good_practices/app/core/exceptions/constants_handling.dart';
+import 'package:flutter_good_practices/app/core/exceptions/request_exeptions.dart';
 import 'package:flutter_good_practices/app/core/exceptions/snackbar_error.dart';
 import 'package:flutter_good_practices/app/core/values/strings.dart';
 import 'package:flutter_good_practices/app/data/repository/trajetoria_repository.dart';
@@ -11,6 +12,43 @@ class RotasController extends GetxController {
   TragetoriaRepository tragetoriaRepository;
   RotasController({required this.tragetoriaRepository});
 
+  @override
+  void onInit() {
+    super.onInit();
+    // É chamada toda vez que o objeto Rx é alterado
+    ever<Option<HttpRequestFailure>>(failure, (_failure) {
+      _failure.map((failure) {
+        num code;
+        String message;
+        if (failure is RedirectionHttpFailure) {
+          code = failure.code;
+          message = failure.description;
+        } else if (failure is ClientHttpErrorFailure) {
+          code = failure.code;
+          message = failure.description;
+        } else if (failure is ServerHttpErrorFailure) {
+          code = failure.code;
+          message = failure.description;
+        } else if (failure is UnknownHttpErrorFailure) {
+          code = failure.code;
+          message = failure.description;
+        } else if (failure is DioHttpErrorFailure) {
+          code = failure.code;
+          message = failure.description;
+        } else {
+          code = 000;
+          message = 'Erro desconhecido';
+        }
+
+        isLoading.value = false;
+        showError(
+          error: 'Erro ${code == 000 ? erroDesconhecido : code}',
+          details: message,
+        );
+      });
+    });
+  }
+
   //Variáveis:
   final RxDouble _lat = 0.0.obs;
   final RxDouble _long = 0.0.obs;
@@ -19,6 +57,10 @@ class RotasController extends GetxController {
   final RxString tempoDeViagem = ''.obs;
   final RxString pedagioCusto = ''.obs;
   final RxString combustivel = ''.obs;
+  final RxString numeroDePedagios = ''.obs;
+
+  final Rx<Option<HttpRequestFailure>> failure =
+      Rx<Option<HttpRequestFailure>>(none());
 
   //Getters
   double get lat => _lat.value;
@@ -65,43 +107,68 @@ class RotasController extends GetxController {
   }
 
   Future<void> getTrageto() async {
+    isLoading.value = true;
     double? _consumoPorLitroCarro = double.tryParse(consumoPorLitroCarro.text);
     double? _precoCombustivel = double.tryParse(precoCombustivel.text);
+    bool hasLongLat = (_lat.value != 0.0) && (_long.value != 0.0);
+    log('LAT: ${_lat.value}    ||    LONG: ${_long.value}\nIS: $hasLongLat');
 
     if (_precoCombustivel == null) {
       showError(
-          error: 'Preço do combustível é inválido',
-          details: 'Valor Digitado é inválido');
+        error: 'Preço do combustível é inválido',
+        details: 'Valor Digitado é inválido',
+      );
+      isLoading.value = false;
       return;
     } else if (_consumoPorLitroCarro == null) {
       showError(
-          error: 'Litro é inválido', details: 'Valor Digitado é inválido');
+        error: 'Litro é inválido',
+        details: 'Valor Digitado é inválido',
+      );
+      isLoading.value = false;
+      return;
+    } else if (!hasLongLat && cepOrigem.text.isEmpty ||
+        cepDestino.text.isEmpty) {
+      showError(
+        error: 'Digite um CEP válido',
+        details: 'CEP Digitado é inválido',
+      );
+      isLoading.value = false;
       return;
     }
-
-    bool hasLongLat = (_lat.value != 0.0) && (_long.value != 0.0);
-    print('LAT: ${_lat.value}    ||    LONG: ${_long.value}\nIS: $hasLongLat');
 
     //o parâmetro pode ser tanto um cep quanto uma cordenada (Latitude-Longitude)
     String _cepOrigem =
         hasLongLat ? '${_long.value},${_lat.value}' : cepOrigem.text;
-    print('ORIGEM: $_cepOrigem');
+    log('ORIGEM: $_cepOrigem');
 
-    var map = await tragetoriaRepository.calcularTragetoria(
+    var mapResult = await tragetoriaRepository.calcularTragetoria(
         _cepOrigem, cepDestino.text, _consumoPorLitroCarro, _precoCombustivel);
-    log(map.toString());
-    distancia.value =
-        map?['rotas']?[0]?[distanciaKey]?['texto'].toString() ?? '';
 
-    tempoDeViagem.value =
-        map?['rotas']?[0]?[tempoDeViagemKey]?['texto'].toString() ?? '';
+    mapResult.fold((left) {
+      // O optionOf checa pra gente se tem algo
+      // left (vê se não é nulo)
+      failure.value = optionOf(left);
+      isLoading.value = false;
+    }, (right) {
+      // quando entra aqui eu tenho CERTEZA
+      // que minha requisão foi um sucesso
+      log(right.toString());
+      distancia.value =
+          right['rotas']?[0]?[distanciaKey]?['texto'].toString() ?? '';
 
-    pedagioCusto.value =
-        map?['rotas']?[0]?[pedagioCustoKey]?['texto'].toString() ?? '';
+      tempoDeViagem.value =
+          right['rotas']?[0]?[tempoDeViagemKey]?['texto'].toString() ?? '';
 
-    pedagioCusto.value =
-        map?['rotas']?[0]?['numPedagios']?['texto'].toString() ?? '';
+      pedagioCusto.value =
+          right['rotas']?[0]?[pedagioCustoKey]?['texto'].toString() ?? '';
 
-    combustivel.value = map?['rotas']?[0]?[combustivelKey].toString() ?? '';
+      combustivel.value = right['rotas']?[0]?[combustivelKey].toString() ?? '';
+
+      numeroDePedagios.value =
+          right['rotas']?[0]?['numPedagios'].toString() ?? '';
+
+      isLoading.value = false;
+    });
   }
 }

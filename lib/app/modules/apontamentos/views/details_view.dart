@@ -17,7 +17,6 @@ class DetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(object['type']);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),

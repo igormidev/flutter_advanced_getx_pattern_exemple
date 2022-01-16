@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_good_practices/app/core/utils/extensions.dart';
 import 'package:flutter_good_practices/app/core/values/colors.dart';
-import 'package:flutter_good_practices/app/modules/apontamentos/apontamentos_controller.dart';
 import 'package:flutter_good_practices/app/routes/app_pages.dart';
 import 'package:flutter_good_practices/app/shared/custom_text.dart';
 import 'package:get/get.dart';

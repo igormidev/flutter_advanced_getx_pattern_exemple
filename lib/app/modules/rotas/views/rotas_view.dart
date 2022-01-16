@@ -78,11 +78,14 @@ class RotasConsultaView extends GetView<RotasController> {
           controller: controller.precoCombustivel,
         ),
         SizedBox(height: 2.0.hp),
-        CustomButton(
-          onPressed: () async {
-            await controller.getTrageto();
-          },
-          text: 'Ver trageto',
+        Obx(
+          () => CustomButton(
+            isEnabled: !controller.isLoading.value,
+            onPressed: () async {
+              await controller.getTrageto();
+            },
+            text: 'Ver trageto',
+          ),
         ),
         Obx(
           () => Column(
@@ -104,23 +107,32 @@ class RotasConsultaView extends GetView<RotasController> {
                 normalText(controller.tempoDeViagem.value),
 
               const Divider(),
-              // Verifica se tem o preço dos pedágios somados
-              if (controller.pedagioCusto.value.isNotEmpty)
-                boldText('Gasto com Pedágio:',
-                    color: Colors.deepPurple, size: 16),
-              if (controller.pedagioCusto.value.isNotEmpty)
-                normalText('R\$ ' + controller.pedagioCusto.value),
-
-              const Divider(),
               // Verifica se tem a estimativa do gasto com gasolina
               if (controller.combustivel.value.isNotEmpty)
                 boldText('Gasto com Gasolina (Estimativa):',
                     color: Colors.deepPurple, size: 16),
               if (controller.combustivel.value.isNotEmpty)
                 normalText('R\$ ' + controller.combustivel.value),
+
+              const Divider(),
+              // Verifica se tem o número de pedágios
+              if (controller.numeroDePedagios.value.isNotEmpty)
+                boldText('Número de pedágios:',
+                    color: Colors.deepPurple, size: 16),
+              if (controller.numeroDePedagios.value.isNotEmpty)
+                normalText('R\$ ' + controller.numeroDePedagios.value),
+
+              const Divider(),
+              // Verifica se tem o preço dos pedágios somados
+              if (controller.pedagioCusto.value.isNotEmpty)
+                boldText('Gasto com Pedágio:',
+                    color: Colors.deepPurple, size: 16),
+              if (controller.pedagioCusto.value.isNotEmpty)
+                normalText('R\$ ' + controller.pedagioCusto.value),
             ],
           ),
         ),
+        SizedBox(height: 4.0.hp),
       ],
     );
   }

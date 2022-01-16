@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   image_picker: ^0.8.4+4
   get_storage: ^2.0.3
+  dartz: ^0.10.1
   url_launcher: ^6.0.18
   geolocator: ^8.0.3
   dio: ^4.0.4

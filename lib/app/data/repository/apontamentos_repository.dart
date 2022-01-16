@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter_good_practices/app/core/exceptions/constants_handling.dart';
 import 'package:flutter_good_practices/app/core/values/strings.dart';
 import 'package:flutter_good_practices/app/data/models/abastecimento_model.dart';
 import 'package:flutter_good_practices/app/data/models/outros_gastos_model.dart';
