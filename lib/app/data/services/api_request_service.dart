@@ -58,10 +58,5 @@ class ApiService implements IHttpInterface {
       final String erro = e.toString();
       return left(UnknownHttpErrorFailure(code: 000, description: erro));
     }
-
-    // return left(
-    //   UnknownHttpErrorFailure(
-    //       code: 000, description: 'Contacte o suporte'),
-    // );
   }
 }

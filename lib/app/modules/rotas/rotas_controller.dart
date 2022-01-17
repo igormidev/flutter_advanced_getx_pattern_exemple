@@ -12,11 +12,19 @@ class RotasController extends GetxController {
   TragetoriaRepository tragetoriaRepository;
   RotasController({required this.tragetoriaRepository});
 
+  //o ever é chamado sempre que a variavel obs dentro dela
+  //é alterado. quando o failure tiver algo (some) o estado
+  //dela que era none será alterado e chamará a função
   @override
   void onInit() {
     super.onInit();
     // É chamada toda vez que o objeto Rx é alterado
     ever<Option<HttpRequestFailure>>(failure, (_failure) {
+      //failure é uma Option do tipo HttpRequestFailure
+      //vamos descobrir qual tipo de HttpRequestFailure ela é
+      //e, dependendo do tipo, mostrar uma mensagem de erro diferente
+      //assim tipificando os erros para melhor compreensão do usuário
+
       _failure.map((failure) {
         num code;
         String message;
@@ -36,14 +44,16 @@ class RotasController extends GetxController {
           code = failure.code;
           message = failure.description;
         } else {
+          //caso não seja nenhum deles, retornará um erro genêrico
           code = 000;
           message = 'Erro desconhecido';
         }
 
         isLoading.value = false;
+        //mostra uma snackbar indicando o erro
         showError(
           error: 'Erro ${code == 000 ? erroDesconhecido : code}',
-          details: message,
+          details: message, //já formatada para o usuário
         );
       });
     });
@@ -59,6 +69,14 @@ class RotasController extends GetxController {
   final RxString combustivel = ''.obs;
   final RxString numeroDePedagios = ''.obs;
 
+  //ignore o Rx<>, é só para deixar a variavél observavel
+  //foque no Option<HttpRequestFailure> failure
+  //failure é uma variavel do tipo option, isso é,
+  //ela representa uma opção e começa como none
+  //(porque não há falha nenhuma inicialmente, e não
+  //existe null no dartz, apenas none (nada) e some (algo))
+  //quando ela tiver algo, o ever do GETX será chamado pq
+  //seu estádo será atualizado
   final Rx<Option<HttpRequestFailure>> failure =
       Rx<Option<HttpRequestFailure>>(none());
 
@@ -145,30 +163,34 @@ class RotasController extends GetxController {
     var mapResult = await tragetoriaRepository.calcularTragetoria(
         _cepOrigem, cepDestino.text, _consumoPorLitroCarro, _precoCombustivel);
 
-    mapResult.fold((left) {
-      // O optionOf checa pra gente se tem algo
-      // left (vê se não é nulo)
-      failure.value = optionOf(left);
-      isLoading.value = false;
-    }, (right) {
-      // quando entra aqui eu tenho CERTEZA
-      // que minha requisão foi um sucesso
-      log(right.toString());
-      distancia.value =
-          right['rotas']?[0]?[distanciaKey]?['texto'].toString() ?? '';
+    mapResult.fold(
+      (left) {
+        // O optionOf checa pra gente se tem algo
+        // left (vê se não é nulo)
+        failure.value = optionOf(left);
+        isLoading.value = false;
+      },
+      (right) {
+        // quando entra aqui eu tenho CERTEZA
+        // que minha requisão foi um sucesso
+        log(right.toString());
+        distancia.value =
+            right['rotas']?[0]?[distanciaKey]?['texto'].toString() ?? '';
 
-      tempoDeViagem.value =
-          right['rotas']?[0]?[tempoDeViagemKey]?['texto'].toString() ?? '';
+        tempoDeViagem.value =
+            right['rotas']?[0]?[tempoDeViagemKey]?['texto'].toString() ?? '';
 
-      pedagioCusto.value =
-          right['rotas']?[0]?[pedagioCustoKey]?['texto'].toString() ?? '';
+        pedagioCusto.value =
+            right['rotas']?[0]?[pedagioCustoKey]?['texto'].toString() ?? '';
 
-      combustivel.value = right['rotas']?[0]?[combustivelKey].toString() ?? '';
+        combustivel.value =
+            right['rotas']?[0]?[combustivelKey].toString() ?? '';
 
-      numeroDePedagios.value =
-          right['rotas']?[0]?['numPedagios'].toString() ?? '';
+        numeroDePedagios.value =
+            right['rotas']?[0]?['numPedagios'].toString() ?? '';
 
-      isLoading.value = false;
-    });
+        isLoading.value = false;
+      },
+    );
   }
 }

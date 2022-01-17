@@ -7,5 +7,6 @@ abstract class IHttpInterface {
   Future<Either<HttpRequestFailure, Map<String, dynamic>>> makeJsonRequest(
       {required String url, Map<String, dynamic>? params});
 
+  //left: erro       right: tudo certo
   //Either<RequestFailure, Map<String, dynamic>>
 }

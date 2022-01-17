@@ -1,3 +1,4 @@
+//Classe que define o tipo de erro
 class HttpRequestFailure implements Exception {
   final num code;
   final String description;
